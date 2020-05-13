@@ -10,7 +10,7 @@ import (
 	 "fmt"
 	 "io/ioutil"
 	 "strconv"
-	//"encoding/json"
+	"encoding/json"
 	"bytes"
 )
 
@@ -21,6 +21,10 @@ type Server struct {
 	Alive        bool
 	ReverseProxy *httputil.ReverseProxy
 }
+// type Resp struct {
+// 	Res float64
+// 	F float64
+// } 
 
 // ServerList is all the servers the Load Balancer
 // has access to. The index of the server accessed
@@ -30,6 +34,11 @@ type ServerList struct {
 	Latest  int
 }
 
+type Resp struct {
+        Res float64
+        F float64
+        Index int
+}
 var res float64=0.0
 
 
@@ -106,6 +115,7 @@ func (serverList *ServerList) loadBalance(w http.ResponseWriter, r *http.Request
 
 	if len(serverList.Servers) > 0 {
 		serverCount := 0
+
 		for index := serverList.nextServer(); serverCount < len(serverList.Servers); index = serverList.nextServer() {
 			if serverList.Servers[index].isAlive() {
 
@@ -134,14 +144,30 @@ func (serverList *ServerList) loadBalance(w http.ResponseWriter, r *http.Request
 				    defer resp.Body.Close()
 				    resBody, _ := ioutil.ReadAll(resp.Body)
 				    f,_:=strconv.ParseFloat(string(resBody),8)
+				    if res==3.1415919999999997 {
+				    	fmt.Println("+++++++++++++++",res)
+				    	res=0
+				    }
 				    res+=f
     				fmt.Println("response Body: ", f)
 					fmt.Println("Ans after adding : ", res)
 					pi:=fmt.Sprintf("%f",res)
 					fmt.Println(pi)
-					b1:=[]byte("Value of Pi : "+pi)
+					b1:=[]byte(pi)
 					fmt.Println(b1)
-					w.Write(b1)
+
+
+					r:=Resp{res,f,index}
+
+					js,err:=json.Marshal(r)
+					if err != nil {
+						http.Error(w,err.Error(),http.StatusInternalServerError)
+						return
+					}
+					w.Header().Set("Content-Type","application/json")
+					w.Write(js)
+
+					//w.Write(b1)
 					
 
 				log.Println("Routing Request",string(body), "To", serverList.Servers[index].Route)
@@ -164,6 +190,7 @@ func (serverList *ServerList) loadBalance(w http.ResponseWriter, r *http.Request
 // the ServerList by providing a list of server routes to
 // connect to and then create a server for the Load Balancer
 func main() {
+	
 	var serverList ServerList
 	loadBalancerPort := "8080"
 
@@ -176,6 +203,7 @@ func main() {
 	serverList.init(serverRoutes)
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+
 		serverList.loadBalance(w, r)
 	})
 

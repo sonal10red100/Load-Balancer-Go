@@ -1,0 +1,70 @@
+<html>
+    <head>
+        <style>  
+        	body{
+        		margin-top: 50px;
+        	}
+            #leftbox { 
+                float:left;  
+                background:#9FF781; 
+                width:33%; 
+                height:650px; 
+            } 
+            #middlebox{ 
+                float:left;  
+                background:#9FF781; 
+                width:33%; 
+                height:650px; 
+            } 
+            #rightbox{ 
+                float:right; 
+                background:#9FF781; 
+                width:33%; 
+                height:650px; 
+            } 
+            h2{ 
+                color:green; 
+                text-align:center; 
+            } 
+            li{
+ 				 margin: 10px 0;
+			  }
+            
+        </style>  
+    </head>
+    <body align="center">
+        <h1 style="color:#08088A;">LOAD BALANCER DEMONSTRATION</h1>
+        <img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/50725fce8b20701f737a6ecc57aff4b8969107c4" alt="Girl in a jacket"><br>
+        <div id = "boxes"> 
+             
+            <div id = "leftbox" style="border: 2px solid black;border-radius: 25px"> 
+                <h2>Server A:</h2>
+                <ol>
+			    {{range .SerA}}
+			            <li>From: {{.Fr}} &nbsp&nbsp&nbsp To:{{.To}} &nbsp&nbsp&nbsp Result:{{.Cal}}</li>
+			    {{end}}
+				</ol> 
+            </div>  
+              
+            <div id = "middlebox" style="border: 2px solid black;border-radius: 25px"> 
+                <h2>Server B</h2> 
+                <ol>
+			    {{range .SerB}}
+			            <li>From: {{.Fr}} &nbsp&nbsp&nbsp To:{{.To}} &nbsp&nbsp&nbsp Result:{{.Cal}}</li>
+			    {{end}}
+				</ol> 
+            </div> 
+              
+            <div id = "rightbox" style="border: 2px solid black;border-radius: 25px"> 
+                <h2>Server C</h2> 
+                <ol>
+			    {{range .SerC}}
+			            <li>From: {{.Fr}} &nbsp&nbsp&nbsp To:{{.To}} &nbsp&nbsp&nbsp Result:{{.Cal}}</li>
+			    {{end}}
+				</ol> 
+            </div> 
+        </div>
+
+        <h2 style="color:#08088A;margin-top: 50px ">VALUE OF PI : <b> {{.Value}}</b><h2>
+    </body>
+</html>

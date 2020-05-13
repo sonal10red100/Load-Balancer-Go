@@ -42,7 +42,7 @@ func HelloServer(w http.ResponseWriter, r *http.Request) {
 	 }
 
    
-	 fmt.Println("req++++++++++ A "+string(data))
+	 fmt.Println(" A "+string(data))
 	 fmt.Fprintf(w,"%f", resA)
 	// fmt.Fprintf(w, "Hello from port %s!", port1)
 }

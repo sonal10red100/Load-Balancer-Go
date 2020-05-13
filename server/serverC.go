@@ -40,7 +40,7 @@ func HelloServer(w http.ResponseWriter, r *http.Request) {
 	 	resC+=2*math.Sqrt(1-i*i)*0.000000001
 	 }
    
-	 fmt.Println("req++++++++++ C "+string(data))
+	 fmt.Println(" C "+string(data))
 	 fmt.Fprintf(w,"%f", resC)
 	//fmt.Fprintf(w, "Hello from port %s!", port3)
 }
